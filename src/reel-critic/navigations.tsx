@@ -38,12 +38,13 @@ export default function Navigation() {
             </Form>
 
             {/* Login & Sign Up Buttons */}
-            <Nav.Link as={Link} to="account/login">
-              <Button variant="outline-light" className="custom-login-btn">Login</Button>
-            </Nav.Link>
-            <Nav.Link as={Link} to="account/register">
-              <Button className="custom-signup-btn">Sign Up</Button>
-            </Nav.Link>
+            <Nav.Link as={Link} to="/reel-critic/account/login">
+  <Button variant="outline-light" className="custom-login-btn">Login</Button>
+</Nav.Link>
+<Nav.Link as={Link} to="/reel-critic/account/register">
+  <Button className="custom-signup-btn">Sign Up</Button>
+</Nav.Link>
+
           </Nav>
         </Navbar.Collapse>
       </Container>
