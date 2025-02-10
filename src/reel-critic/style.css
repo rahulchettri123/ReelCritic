@@ -71,3 +71,46 @@
  body{
     background-color: black;
  }
+ /* 🔍 Ensure the dropdown appears below the search bar */
+.search-container {
+  position: relative;
+  width: 280px;
+}
+
+/* 🔍 Autocomplete Dropdown */
+.autocomplete-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background-color: #222;
+  border-radius: 5px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  max-height: 300px;
+  overflow-y: auto;
+  margin-top: 5px;
+}
+
+/* 🖼️ Style for Movie Suggestion Item */
+.autocomplete-item {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  cursor: pointer;
+  color: white;
+  transition: background 0.2s;
+}
+
+.autocomplete-item:hover {
+  background-color: #444;
+}
+
+/* 📷 Movie Image in Autocomplete */
+.autocomplete-img {
+  width: 40px;
+  height: 60px;
+  object-fit: cover;
+  margin-right: 10px;
+  border-radius: 5px;
+}
