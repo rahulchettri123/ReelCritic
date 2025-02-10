@@ -1,0 +1,73 @@
+/* General navbar styles */
+.nav-item {
+    font-weight: 500;
+    font-size: 16px;
+    transition: color 0.3s ease-in-out;
+  }
+  
+  /* Active link style */
+  .active-nav {
+    color: red ;
+  }
+  
+
+ 
+  
+  /* Navbar background */
+  .navbar {
+    background-color: black;
+  }
+  
+  /* Netflix-style Search Bar */
+  .custom-search {
+    display: flex;
+    align-items: center;
+    position: relative;
+  }
+  
+  .search-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background-color: rgba(50, 50, 50, 0.8); /* Dark grey background */
+    padding: 8px 12px;
+    border-radius: 30px;
+    
+    width: 260px;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  /* Ensure search bar does NOT turn white when clicked */
+  .search-input {
+    background: transparent !important;
+    border: none;
+    outline: none;
+    color: white !important;
+    padding-left: 35px;
+    font-size: 15px;
+    width: 100%;
+  }
+  
+  .search-input::placeholder {
+    color: rgba(200, 200, 200, 0.7);
+  }
+  
+  /* Search Icon */
+  .search-icon {
+    position: absolute;
+    left: 10px;
+    color: rgba(200, 200, 200, 0.7);
+    font-size: 18px;
+    transition: color 0.3s ease-in-out;
+  }
+  /* Remove blue outline when clicking inside the search bar */
+.search-input:focus {
+    outline: none !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+  
+  
+ body{
+    background-color: black;
+ }
