@@ -4,6 +4,8 @@ import Home from "./home";
 import Search from "./search";
 import Account from "./account";
 import Movies from "./movies";
+import TrendingMovies from "./movies/trending_movies";
+import TvShows from "./tvshows";
 
 export default function ReelCritic() {
   return (
@@ -20,6 +22,8 @@ export default function ReelCritic() {
           {/* Other Pages */}
           <Route path="account/*" element={<Account />} />
           <Route path="movies/*" element={<Movies />} />
+          <Route path="tvshows" element={<TvShows/>} />
+          <Route path="trending_movies" element={<TrendingMovies />} />
           <Route path="search/*" element={<Search />} />
 
           {/* Redirect unknown routes to home */}

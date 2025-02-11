@@ -95,16 +95,10 @@ export default function Navigation() {
             >
               TV Shows
             </Nav.Link>
+            
             <Nav.Link
               as={Link}
-              to="/reel-critic/series"
-              className="text-light mx-3 nav-item"
-            >
-              Series
-            </Nav.Link>
-            <Nav.Link
-              as={Link}
-              to="/reel-critic/trending"
+              to="/reel-critic/trending_movies"
               className="text-light mx-3 nav-item"
             >
               Trending
