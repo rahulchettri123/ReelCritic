@@ -39,11 +39,17 @@ export default function Navigation() {
     fetchSuggestions();
   }, [query]);
 
-  // ✅ Navigate when a user selects a suggestion
-  const handleSelect = (title: string) => {
-    navigate(`/reel-critic/search?query=${title}`);
+  // ✅ Modified to navigate to search with movie details
+  const handleSelect = (movie: any) => {
+    // Navigate to search component with selected movie data
+    navigate(`/reel-critic/search?id=${movie.id}`, {
+      state: { selectedMovie: movie, fromSearch: true }
+    });
+    
+    // Clear search UI
+    setQuery("");
     setSuggestions([]);
-    setShowDropdown(false); // ✅ Hide dropdown after selection
+    setShowDropdown(false); 
   };
 
   // ✅ Prevent default form submission on Enter key
@@ -56,6 +62,19 @@ export default function Navigation() {
     }
   };
 
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setShowDropdown(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <Navbar bg="black" expand="lg" fixed="top" className="px-4">
@@ -105,8 +124,8 @@ export default function Navigation() {
             </Nav.Link>
 
             {/* Enhanced Netflix-style Search Bar */}
-           {/* Search Bar with Live Autocomplete */}
-           <div className="search-container" ref={dropdownRef}>
+            {/* Search Bar with Live Autocomplete */}
+            <div className="search-container" ref={dropdownRef}>
               <Form className="d-flex mx-3 custom-search" onSubmit={handleSearch}>
                 <div className="search-wrapper">
                   <CiSearch className="search-icon" />
@@ -123,15 +142,14 @@ export default function Navigation() {
                   />
                 </div>
               </Form>
-{/* ✅ Display autocomplete suggestions */}
-            {/* ✅ Display autocomplete suggestions below search bar */}
-            {showDropdown && suggestions.length > 0 && (
+              {/* ✅ Display autocomplete suggestions */}
+              {showDropdown && suggestions.length > 0 && (
                 <ListGroup className="autocomplete-dropdown">
                   {suggestions.map((movie) => (
                     <ListGroup.Item
                       key={movie.id}
                       className="autocomplete-item"
-                      onClick={() => handleSelect(movie.title)}
+                      onClick={() => handleSelect(movie)}
                     >
                       <img src={movie.poster || "/no-image.png"} alt={movie.title} className="autocomplete-img" />
                       <span>{movie.title} ({movie.type})</span>
@@ -139,7 +157,7 @@ export default function Navigation() {
                   ))}
                 </ListGroup>
               )}
-               </div>
+            </div>
             {/* Login & Sign Up Buttons */}
             <Nav.Link as={Link} to="/reel-critic/account/login">
               <Button variant="outline-light" className="custom-login-btn">

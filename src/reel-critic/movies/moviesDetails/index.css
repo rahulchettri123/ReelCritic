@@ -1,0 +1,134 @@
+/* MovieDetails.css */
+
+.movie-details-container {
+    min-height: 100vh;
+    background-color: #1a1a1a;
+    color: #ffffff;
+  }
+  
+  .movie-poster {
+    max-width: 100%;
+    height: auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    border-radius: 8px;
+  }
+  
+  .movie-meta .badge {
+    font-size: 0.9rem;
+    padding: 0.5em 1em;
+    margin-right: 0.5rem;
+  }
+  
+  /* Comments section styling */
+  .comments-section {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  
+  .comments-list {
+    margin-top: 2rem;
+  }
+  
+  /* Comment card styling */
+  .comment-card {
+    background-color: #252525;
+    border: 1px solid #333;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    transition: all 0.2s ease;
+  }
+  
+  .comment-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+  
+  /* Form styling */
+  .form-control {
+    background-color: #2a2a2a !important;
+    border: 1px solid #333 !important;
+    color: #fff !important;
+  }
+  
+  .form-control:focus {
+    background-color: #2a2a2a !important;
+    border-color: #4a4a4a !important;
+    box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0.1) !important;
+    color: #fff !important;
+  }
+  
+  .form-control::placeholder {
+    color: #888 !important;
+  }
+  
+  /* Button styling */
+  .btn-outline-light:hover {
+    background-color: #ffffff20;
+  }
+  
+  /* Like button styling */
+  .like-button {
+    background: transparent;
+    border: 1px solid #ffffff40;
+    color: #fff;
+    padding: 0.25rem 0.75rem;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+  }
+  
+  .like-button:hover {
+    background-color: #ffffff10;
+    border-color: #ffffff60;
+  }
+  
+  .like-button.liked {
+    background-color: #dc3545;
+    border-color: #dc3545;
+  }
+  
+  /* Username and timestamp styling */
+  .comment-username {
+    color: #fff;
+    font-weight: 600;
+  }
+  
+  .comment-timestamp {
+    color: #888;
+    font-size: 0.85rem;
+  }
+  
+  /* Like count styling */
+  .like-count {
+    color: #888;
+    font-size: 0.85rem;
+    margin-left: 0.5rem;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .movie-meta .badge {
+      font-size: 0.8rem;
+      margin-bottom: 0.5rem;
+      display: inline-block;
+    }
+  
+    .comment-card {
+      padding: 0.75rem;
+    }
+  
+    .movie-details-container {
+      padding: 1rem;
+    }
+  }
+  
+  /* Animation for likes */
+  @keyframes likeAnimation {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+  }
+  
+  .like-animation {
+    animation: likeAnimation 0.3s ease;
+  }

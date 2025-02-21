@@ -6,6 +6,8 @@ import Account from "./account";
 import Movies from "./movies";
 import TrendingMovies from "./movies/trending_movies";
 import TvShows from "./tvshows";
+import MovieDetails from "./movies/moviesDetails";
+
 
 export default function ReelCritic() {
   return (
@@ -25,9 +27,11 @@ export default function ReelCritic() {
           <Route path="tvshows" element={<TvShows/>} />
           <Route path="trending_movies" element={<TrendingMovies />} />
           <Route path="search/*" element={<Search />} />
-
+          <Route path="movies/:movieId" element={<MovieDetails />} />
           {/* Redirect unknown routes to home */}
           <Route path="*" element={<Navigate to="home" replace />} />
+          
+          
         </Routes>
       </div>
     </div>

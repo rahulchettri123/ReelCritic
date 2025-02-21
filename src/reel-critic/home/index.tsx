@@ -1,62 +1,131 @@
-import { useState, useEffect } from "react";
+// src/components/home/index.tsx
 
-import { Container, Card } from "react-bootstrap";
-import "./index.css";
+import  { useEffect, useState } from 'react';
+import { Container, Row, Col, Spinner, Card, Button } from 'react-bootstrap';
+import { getPosts, addPost, Post } from '../../../services/posts';
+import { PostCard } from '../../components/posts/PostCard';
+import { CreatePost } from '../../components/posts/CreatePost';
 
-// ✅ Define Review Type
-interface Review {
-  id: number;
-  title: string;
-  content: string;
-  author: string;
-}
+const GENRES = ['All', 'Action', 'Adventure', 'Comedy', 'Drama', 'Horror', 'Sci-Fi', 'Thriller'];
 
 export default function Home() {
-  const [user, setUser] = useState<{ name: string } | null>(null);
-  const [latestReviews, setLatestReviews] = useState<Review[]>([]);
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [filteredPosts, setFilteredPosts] = useState<Post[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [selectedGenre, setSelectedGenre] = useState('All');
 
   useEffect(() => {
-    // Simulate fetching user session
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
+    const fetchPosts = async () => {
+      try {
+        setLoading(true);
+        const recentPosts = await getPosts();
+        setPosts(recentPosts);
+        setFilteredPosts(recentPosts);
+      } catch (err: any) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-    // ✅ Provide Properly Typed Data
-    setLatestReviews([
-      { id: 1, title: "Inception Review", content: "A mind-blowing experience!", author: "JohnDoe" },
-      { id: 2, title: "Avatar Review", content: "Visually stunning!", author: "JaneDoe" },
-    ]);
+    fetchPosts();
   }, []);
 
+  useEffect(() => {
+    if (selectedGenre === 'All') {
+      setFilteredPosts(posts);
+    } else {
+      const filtered = posts.filter(post => 
+        post.genres.includes(selectedGenre)
+      );
+      setFilteredPosts(filtered);
+    }
+  }, [selectedGenre, posts]);
+
+  const handleCreatePost = async (postData: any) => {
+    try {
+      const newPost = await addPost(postData);
+      setPosts(prevPosts => [newPost, ...prevPosts]);
+    } catch (err: any) {
+      console.error('Error creating post:', err);
+    }
+  };
+
   return (
-    <Container className="home-container text-center">
-      <h1 className="text-white my-4">Welcome to <span className="text-danger">ReelCritic</span></h1>
-      <p className="text-light">Discover and share your thoughts on the latest movies and TV shows.</p>
-
-      {/* Anonymous Users View */}
-      {!user ? (
-        <div>
-          <p className="text-light">Join our community today!</p>
-
-        </div>
-      ) : (
-        /* Logged-In User View */
-        <div>
-          <h2 className="text-white">Welcome back, {user.name}!</h2>
-          <p className="text-light">Here are your latest reviews:</p>
-          {latestReviews.map(review => (
-            <Card key={review.id} className="m-3 text-start">
-              <Card.Body>
-                <Card.Title>{review.title}</Card.Title>
-                <Card.Text>{review.content}</Card.Text>
-                <Card.Footer className="text-muted">by {review.author}</Card.Footer>
-              </Card.Body>
-            </Card>
-          ))}
+    <Container fluid className="py-5 mt-5">
+      <Row>
+        {/* Main Content */}
+        <Col md={8}>
+          <CreatePost onSubmit={handleCreatePost} />
           
-        </div>
-      )}
+          <div className="d-flex justify-content-between align-items-center mb-4">
+            <h5 className="text-light mb-0">Posts</h5>
+            <div className="d-flex gap-2">
+              {GENRES.map(genre => (
+                <Button
+                  key={genre}
+                  variant={selectedGenre === genre ? "danger" : "outline-light"}
+                  size="sm"
+                  onClick={() => setSelectedGenre(genre)}
+                >
+                  {genre}
+                </Button>
+              ))}
+            </div>
+          </div>
+
+          {loading ? (
+            <div className="text-center py-5">
+              <Spinner animation="border" variant="danger" />
+            </div>
+          ) : error ? (
+            <div className="text-danger text-center py-5">
+              Error: {error}
+            </div>
+          ) : filteredPosts.length === 0 ? (
+            <div className="text-light text-center py-5">
+              No posts found for this genre. Be the first to post!
+            </div>
+          ) : (
+            <div>
+              {filteredPosts.map((post) => (
+                <PostCard key={post.id} post={post} />
+              ))}
+            </div>
+          )}
+        </Col>
+
+        {/* Sidebar */}
+        <Col md={4}>
+          <Card className="bg-dark text-light">
+            <Card.Header>
+              <h5 className="mb-0">Recent Activity</h5>
+            </Card.Header>
+            <Card.Body>
+              {posts.slice(0, 5).map(post => (
+                <div key={post.id} className="mb-3 border-bottom border-secondary pb-2">
+                  <div className="d-flex align-items-center gap-2">
+                    <img
+                      src={post.userAvatar}
+                      alt={post.userName}
+                      className="rounded-circle"
+                      width="30"
+                      height="30"
+                    />
+                    <div>
+                      <small className="fw-bold">{post.userName}</small>
+                      <small className="text-muted d-block">
+                        posted about {post.movieTitle}
+                      </small>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
     </Container>
   );
 }

@@ -3,6 +3,36 @@ import axios from "axios";
 const API_KEY = import.meta.env.VITE_RAPIDAPI_KEY;
 const API_HOST = import.meta.env.VITE_RAPIDAPI_HOST;
 
+// In services/api.ts
+
+// In services/api.ts
+
+export const fetchMovieDetails = async (movieId: string) => {
+  try {
+    const response = await axios.get(
+      "https://imdb236.p.rapidapi.com/imdb/most-popular-movies",  // Using the same endpoint that works
+      {
+        headers: {
+          "X-RapidAPI-Key": API_KEY,
+          "X-RapidAPI-Host": API_HOST,
+        },
+      }
+    );
+
+    // Find the specific movie from the response array
+    const movieData = response.data.find((movie: any) => movie.id === movieId);
+
+    if (!movieData) {
+      throw new Error("Movie not found in the response");
+    }
+
+    console.log('Found movie data:', movieData); // For debugging
+    return movieData;
+  } catch (error: any) {
+    console.error("❌ Error fetching movie details:", error?.response?.data || error.message);
+    throw error;
+  }
+};
 export const fetchMostPopularMovies = async () => {
   try {
     const response = await axios.get(
@@ -34,41 +64,6 @@ export const fetchMostPopularMovies = async () => {
 
 
 
-export const searchMovies = async (query: string) => {
-  try {
-    console.log(`🔍 Fetching results for: ${query}`);
-
-    const response = await axios.get(`https://imdb236.p.rapidapi.com/imdb/search`, {
-      headers: {
-        "X-RapidAPI-Key": API_KEY,
-        "X-RapidAPI-Host": API_HOST,
-      },
-      params: { query },
-    });
-
-    console.log("🔍 API Response:", response.data);
-
-    if (response.data.results) {
-      // ✅ Manually filter results based on `primaryTitle`
-      const filteredMovies = response.data.results.filter((movie: any) =>
-        movie.primaryTitle.toLowerCase().includes(query.toLowerCase())
-      );
-
-      return filteredMovies.map((movie: any) => ({
-        id: movie.id || "N/A",
-        title: movie.primaryTitle || "Unknown Title",
-        poster: movie.primaryImage || null,
-        rating: movie.rating || "N/A",
-      }));
-    }
-
-    throw new Error("No movies found in API response.");
-  } catch (error: any) {
-    console.error("❌ Error fetching search results:", error?.response?.data || error.message);
-    return [];
-  }
-};
-
 
 
 
@@ -95,20 +90,29 @@ export const fetchAutocompleteMovies = async (query: string) => {
 
     console.log("🔍 Full API Response:", response.data); // ✅ Debug full API response
 
-    // ✅ Extract results from response
+    // ✅ Extract all available fields from response
     if (response.data && response.data.length > 0) {
       const processedResults = response.data.map((movie: any) => ({
         id: movie.id || "N/A",
         title: movie.primaryTitle || movie.originalTitle || "Unknown Title",
-        poster: movie.primaryImage || "/no-image.png", // ✅ Ensure correct field
+        poster: movie.primaryImage || "/no-image.png",
         type: movie.type || "Unknown Type",
+        averageRating: movie.averageRating || null,
+        contentRating: movie.contentRating || null,
+        description: movie.description || null,
+        genres: movie.genres || [],
+        releaseDate: movie.releaseDate || null,
+        startYear: movie.startYear || null,
+        runtimeMinutes: movie.runtimeMinutes || null,
+        languages: movie.languages || [],
+        countriesOfOrigin: movie.countriesOfOrigin || []
       }));
 
       console.log("✅ Processed Results:", processedResults); // ✅ Debug processed data
       return processedResults;
     }
 
-    console.error("❌ No valid results found in API response.");
+  
     return [];
   } catch (error: any) {
     console.error("❌ Error fetching autocomplete search results:", error?.response?.data || error.message);

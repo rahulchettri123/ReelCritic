@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { fetchMostPopularMovies } from "../../../services/api";
 import { Carousel, Container, Row, Col } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -14,6 +15,7 @@ interface Movie {
 }
 
 export default function TopMovies() {
+  const navigate = useNavigate();
   const [movies, setMovies] = useState<Movie[]>([]);
   const [groupedMovies, setGroupedMovies] = useState<Movie[][]>([]);
 
@@ -43,7 +45,6 @@ export default function TopMovies() {
     getMovies();
   }, []);
 
-  // Group movies into chunks of 6 for carousel items
   useEffect(() => {
     if (movies.length) {
       const chunkSize = 6;
@@ -54,6 +55,11 @@ export default function TopMovies() {
       setGroupedMovies(grouped);
     }
   }, [movies]);
+
+  const handleMovieClick = (movieId: string) => {
+    // Updated navigation path to match the route we defined
+    navigate(`/reel-critic/movies/${movieId}`);
+  };
 
   return (
     <div className="movies-section">
@@ -66,14 +72,17 @@ export default function TopMovies() {
               <Carousel.Item key={index}>
                 <Row className="justify-content-center">
                   {group.map((movie) => (
-                    <Col key={movie.id} xs={12} sm={6} md={4} lg={2} className="movie-item">
+                    <Col 
+                      key={movie.id} 
+                      xs={12} sm={6} md={4} lg={2} 
+                      className="movie-item"
+                      onClick={() => handleMovieClick(movie.id)}
+                      style={{ cursor: 'pointer' }}
+                    >
                       <img src={movie.primaryImage} alt={movie.primaryTitle} className="movie-image" />
                       <div className="movie-info">
                         <h5>{movie.primaryTitle}</h5>
                         <p>⭐ {movie.averageRating} | 📅 {movie.releaseDate}</p>
-                        <a href={movie.url} target="_blank" rel="noopener noreferrer" className="imdb-link">
-                          IMDB: View
-                        </a>
                       </div>
                     </Col>
                   ))}
